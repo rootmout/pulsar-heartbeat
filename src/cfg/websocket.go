@@ -83,7 +83,7 @@ func tokenAsURLQueryParam(url, token string) string {
 }
 
 // WsLatencyTest latency test for websocket
-func WsLatencyTest(producerURL, subscriptionURL string, tokenSupplier func()(string,error)) (MsgResult, error) {
+func WsLatencyTest(producerURL, subscriptionURL string, tokenSupplier func() (string, error)) (MsgResult, error) {
 	wsHeaders := http.Header{}
 	token := ""
 	var err error
@@ -225,7 +225,7 @@ func TestWsLatency(config WsConfig) {
 		ClearIncident(config.Name)
 	}
 
-	PromLatencySum(GetGaugeType(websocketSubsystem), config.Cluster, result.Latency)
+	PromLatencySum(GetGaugeType(websocketSubsystem), config.Cluster, "", result.Latency)
 }
 
 // WebSocketTopicLatencyTestThread tests a message websocket delivery in topic and measure the latency.

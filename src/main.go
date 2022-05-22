@@ -64,6 +64,7 @@ func main() {
 	cfg.RunInterval(cfg.PulsarTenants, util.TimeDuration(config.PulsarAdminConfig.IntervalSeconds, 120, time.Second))
 	cfg.RunInterval(cfg.StartHeartBeat, util.TimeDuration(config.OpsGenieConfig.IntervalSeconds, 240, time.Second))
 	cfg.RunInterval(cfg.UptimeHeartBeat, 30*time.Second) // fixed 30 seconds for heartbeat
+	cfg.RemailerThread()
 	cfg.MonitorSites()
 	cfg.TopicLatencyTestThread()
 	cfg.WebSocketTopicLatencyTestThread()

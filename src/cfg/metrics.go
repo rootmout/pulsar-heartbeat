@@ -163,16 +163,27 @@ func PromCounter(opt prometheus.CounterOpts, cluster string) {
 }
 
 // PromLatencySum expose monitoring metrics to Prometheus
-func PromLatencySum(opt prometheus.GaugeOpts, cluster string, latency time.Duration) {
+func PromLatencySum(opt prometheus.GaugeOpts, cluster string, remoteCluster string, latency time.Duration) {
 	key := getMetricKey(opt)
 	ms := float64(latency / time.Millisecond)
 	if promMetric, ok := metrics[key]; ok {
-		promMetric.WithLabelValues(cluster).Set(ms)
+		if remoteCluster == "" {
+			promMetric.WithLabelValues(cluster).Set(ms) //FIXME: bad design
+		} else {
+			promMetric.WithLabelValues(cluster, remoteCluster).Set(ms)
+		}
 	} else {
-		newMetric := prometheus.NewGaugeVec(opt, []string{"device"})
-		prometheus.Register(newMetric)
-		newMetric.WithLabelValues(cluster).Set(ms)
-		metrics[key] = newMetric
+		if remoteCluster == "" {
+			newMetric := prometheus.NewGaugeVec(opt, []string{"device"})
+			newMetric.WithLabelValues(cluster).Set(ms)
+			prometheus.Register(newMetric)
+			metrics[key] = newMetric
+		} else {
+			newMetric := prometheus.NewGaugeVec(opt, []string{"device", "remote_cluster"})
+			newMetric.WithLabelValues(cluster, remoteCluster).Set(ms)
+			prometheus.Register(newMetric)
+			metrics[key] = newMetric
+		}
 	}
 
 	if summary, ok := summaries[key]; ok {

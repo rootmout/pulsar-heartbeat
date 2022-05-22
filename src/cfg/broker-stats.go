@@ -46,7 +46,7 @@ const (
 )
 
 // GetBrokers gets a list of brokers and ports
-func GetBrokers(restBaseURL, clusterName string, tokenSupplier func()(string, error)) ([]string, error) {
+func GetBrokers(restBaseURL, clusterName string, tokenSupplier func() (string, error)) ([]string, error) {
 	brokersURL := util.SingleSlashJoin(restBaseURL, "admin/v2/brokers/"+clusterName)
 	newRequest, err := http.NewRequest(http.MethodGet, brokersURL, nil)
 	if err != nil {
@@ -158,7 +158,7 @@ func BrokerTopicsQuery(brokerBaseURL, token string) ([]string, error) {
 }
 
 // ConnectBrokerHealthcheckTopic reads the latest messages off broker's healthcheck topic
-func ConnectBrokerHealthcheckTopic(brokerURL, clusterName, pulsarURL string, tokenSupplier func()(string,error), completeChan chan error) {
+func ConnectBrokerHealthcheckTopic(brokerURL, clusterName, pulsarURL string, tokenSupplier func() (string, error), completeChan chan error) {
 	// "persistent://pulsar/{cluster}/10.244.7.85:8080/healthcheck"
 	brokerAddr := util.SingleSlashJoin(strings.ReplaceAll(brokerURL, "http://", ""), "healthcheck")
 	defer func() {
@@ -167,7 +167,7 @@ func ConnectBrokerHealthcheckTopic(brokerURL, clusterName, pulsarURL string, tok
 			log.Errorf("cluster %s individual broker %s test timed out", clusterName, brokerAddr)
 		}
 	}()
-	client, err := GetPulsarClient(pulsarURL, tokenSupplier)
+	client, err := GetPulsarClient(GetConfig(), pulsarURL, tokenSupplier)
 	if err != nil {
 		completeChan <- err
 		return
@@ -207,7 +207,7 @@ func ConnectBrokerHealthcheckTopic(brokerURL, clusterName, pulsarURL string, tok
 }
 
 // EvaluateBrokers evaluates all brokers' health
-func EvaluateBrokers(urlPrefix, clusterName, pulsarURL string, tokenSupplier func()(string,error), duration time.Duration) (int, error) {
+func EvaluateBrokers(urlPrefix, clusterName, pulsarURL string, tokenSupplier func() (string, error), duration time.Duration) (int, error) {
 	brokers, err := GetBrokers(urlPrefix, clusterName, tokenSupplier)
 	if err != nil {
 		return 0, err

@@ -57,7 +57,7 @@ func monitorSite(site SiteCfg) error {
 	if err != nil {
 		return err
 	}
-	PromLatencySum(SiteLatencyGaugeOpt(), site.Name, time.Now().Sub(sentTime))
+	PromLatencySum(SiteLatencyGaugeOpt(), site.Name, "", time.Now().Sub(sentTime))
 
 	if site.StatusCode > 0 && resp.StatusCode != site.StatusCode {
 		return fmt.Errorf("Response statusCode %d does not match the expected code %d", resp.StatusCode, site.StatusCode)

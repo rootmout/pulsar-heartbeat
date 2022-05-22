@@ -154,7 +154,7 @@ func AllMsgPayloads(prefix string, payloadSizes []string, numOfMsg int) ([][]byt
 		size := 0
 		payloads[i], size = GenPayload(pre, payloadSizes[specifiedIndex])
 		maxPayloadSize = int(math.Max(float64(maxPayloadSize), float64(size)))
-
+		payloads[i] = []byte(fmt.Sprintf("%s%s", payloads[i], time.Now().String()))
 	}
 
 	return payloads, maxPayloadSize

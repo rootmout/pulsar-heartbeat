@@ -121,9 +121,10 @@ type TopicCfg struct {
 	IntervalSeconds         int            `json:"intervalSeconds"`
 	ExpectedMsg             string         `json:"expectedMsg"`
 	PayloadSizes            []string       `json:"payloadSizes"`
-	NumOfMessages           int            `json:"numberOfMessages"`
+	NumberOfMessages        int            `json:"numberOfMessages"`
 	AlertPolicy             AlertPolicyCfg `json:"AlertPolicy"`
 	DowntimeTrackerDisabled bool           `json:"downtimeTrackerDisabled"`
+	RemoteClusters          []string       `json:"RemoteClusters"`
 }
 
 // WsConfig is configuration to monitor WebSocket pub sub latency
@@ -224,6 +225,10 @@ func (c *Configuration) Init() {
 		c.tokenFunc = func() (string, error) {
 			return c.Token, nil
 		}
+	}
+
+	for k, v := range c.PulsarTopicConfig {
+		c.PulsarTopicConfig[k].RemoteClusters = append(v.RemoteClusters, c.Name) //TODO best option ?
 	}
 }
 
