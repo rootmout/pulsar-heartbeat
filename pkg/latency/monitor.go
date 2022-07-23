@@ -1,9 +1,7 @@
 package latency
 
 import (
-	"context"
 	"github.com/apache/pulsar-client-go/pulsar"
-	"time"
 )
 
 // Test the latency between the publication and the consumption of a
@@ -11,7 +9,7 @@ import (
 // A running remailer is mandatory on other cluster to send back the ping.
 
 type Monitor struct {
-	checkLatencyFunction func(ctx context.Context, producer pulsar.Producer, consumer pulsar.Consumer, messages []pulsar.Message) (time.Duration, error)
+	client pulsar.Client
 }
 
 type NewMonitorReq struct {
@@ -19,11 +17,17 @@ type NewMonitorReq struct {
 }
 
 func NewMonitor(req *NewMonitorReq) Monitor {
-	return Monitor{
-		checkLatencyFunction: CheckLatency,
-	}
+	//TODO implement me
+	panic("implement me")
 }
 
 func (m *Monitor) CheckLatency() {
-
+	//TODO implement me
+	//create msg list
+	//create pub sub session
+	//start list
+	// start sending the messages
+	//select error or complete
+	// compare created msg and received calcul latency
+	panic("implement me")
 }
