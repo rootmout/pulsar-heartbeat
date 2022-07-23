@@ -2,6 +2,7 @@ package latency
 
 import (
 	"context"
+	"github.com/apache/pulsar-client-go/pulsar"
 	"time"
 )
 
@@ -9,14 +10,12 @@ import (
 // message on a topic after a round trip to a remote cluster.
 // A running remailer is mandatory on other cluster to send back the ping.
 
-type PulsarClient interface {
-}
-
 type Monitor struct {
-	checkLatencyFunction func(ctx context.Context, producer *PulsarProducer, consumer *PulsarConsumer, messages []PulsarMessage) (time.Duration, error)
+	checkLatencyFunction func(ctx context.Context, producer pulsar.Producer, consumer pulsar.Consumer, messages []pulsar.Message) (time.Duration, error)
 }
 
 type NewMonitorReq struct {
+	client pulsar.Client
 }
 
 func NewMonitor(req *NewMonitorReq) Monitor {
