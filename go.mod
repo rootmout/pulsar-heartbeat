@@ -32,15 +32,14 @@ require (
 	github.com/danieljoos/wincred v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dvsekhvalnov/jose2go v0.0.0-20201001154944-b09cfaf05951 // indirect
-	github.com/frankban/quicktest v1.14.3 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.2 // indirect
-	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
+	github.com/google/uuid v1.1.2 // indirect
 	github.com/googleapis/gnostic v0.3.1 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.1 // indirect
@@ -48,6 +47,7 @@ require (
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/keybase/go-keychain v0.0.0-20190712205309-48d3d31d256d // indirect
 	github.com/klauspost/compress v1.11.3 // indirect
+	github.com/kr/pretty v0.3.0 // indirect
 	github.com/linkedin/goavro/v2 v2.10.0 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
@@ -85,4 +85,4 @@ replace github.com/miekg/dns => github.com/miekg/dns v1.1.25
 
 replace github.com/aws/aws-sdk-go => github.com/aws/aws-sdk-go v1.34.0
 
-replace github.com/datastax/pulsar-heartbeat v0.0.5 => github.com/rootmout/pulsar-heartbeat v0.0.1
+replace github.com/datastax/pulsar-heartbeat v0.0.5 => github.com/rootmout/pulsar-heartbeat/v10 v10.0.1

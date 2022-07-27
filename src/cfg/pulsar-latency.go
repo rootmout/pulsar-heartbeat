@@ -25,6 +25,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"k8s.io/apimachinery/pkg/util/uuid"
 	"math/rand"
 	"net/url"
 	"strings"
@@ -102,6 +103,8 @@ func PubSubLatency(globalConfiguration *Configuration, clusterName string, topic
 		return nil, err
 	}
 
+	latencyMesureUUID := string(uuid.NewUUID())
+
 	// it is important to close client after close of producer/consumer
 	// defer client.Close()
 
@@ -171,7 +174,7 @@ func PubSubLatency(globalConfiguration *Configuration, clusterName string, topic
 			cCtx, cancel := context.WithTimeout(context.Background(), receiveTimeout)
 			defer cancel()
 
-			log.Infof("wait to receive on message count %d", receivedCount)
+			log.Infof("[%s] wait to receive on message count %d", latencyMesureUUID, receivedCount)
 			msg, err := consumer.Receive(cCtx)
 
 			receivedTime := time.Now()
@@ -182,7 +185,7 @@ func PubSubLatency(globalConfiguration *Configuration, clusterName string, topic
 				break
 			} else {
 				consumer.Ack(msg)
-				log.Infof("received msg with content %s", msg.Payload())
+				log.Infof("[%s] received msg with content %s", latencyMesureUUID, msg.Payload())
 			}
 
 			if msg.Properties()["ping-from"] != clusterName {
@@ -227,7 +230,7 @@ func PubSubLatency(globalConfiguration *Configuration, clusterName string, topic
 				}
 				monitoredClusters[msg.Properties()["ping-remailer"]] = clusterResult
 			}
-			log.Infof("consumer received message index %d from remote-cluster %s, payload size %d\n", currentMsgIndex, remoteCluster, len(receivedStr))
+			log.Infof("[%s] consumer received message index %d from remote-cluster %s, payload size %d\n", latencyMesureUUID, currentMsgIndex, remoteCluster, len(receivedStr))
 		}
 
 		//successful case all message received
