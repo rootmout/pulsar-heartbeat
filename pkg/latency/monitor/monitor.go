@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/apache/pulsar-client-go/pulsar"
-	"github.com/datastax/pulsar-heartbeat/internal/utils"
 	pubsubsession "github.com/datastax/pulsar-heartbeat/pkg/latency/pub_sub_session"
 	"github.com/datastax/pulsar-heartbeat/pkg/payload"
 	"golang.org/x/exp/slices"
@@ -38,15 +37,19 @@ type NewMonitorReq struct {
 	RemoteClusterName string
 	TopicURL          *url.URL
 	NumberOfMessages  int
+	Prefix            string
+	PayloadsSizes     []string
 }
 
-func NewMonitor(req *NewMonitorReq) *monitor {
+func NewMonitor(req *NewMonitorReq) Monitor {
 	return &monitor{
 		client:            req.Client,
 		localClusterName:  req.LocalClusterName,
 		remoteClusterName: req.RemoteClusterName,
 		topicURL:          req.TopicURL,
 		numberOfMessages:  req.NumberOfMessages,
+		prefix:            req.Prefix,
+		payloadsSizes:     req.PayloadsSizes,
 	}
 }
 
@@ -83,7 +86,7 @@ func (m *monitor) checkLatency(session pubsubsession.PubSubSession, ctx context.
 			index := slices.IndexFunc(
 				sentTimestampedPayloads,
 				func(stampedPayload pubsubsession.TimeStampedPayload) bool {
-					return utils.EqualByteSlice(stampedPayload.Payload, msg.Payload)
+					return string(stampedPayload.Payload) == string(msg.Payload)
 				})
 
 			// No message with such payload has been sent: the message is corrupted.
