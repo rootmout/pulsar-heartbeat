@@ -82,6 +82,7 @@ func (r *remailer) remail() int {
 	if r.producer == nil {
 		r.producer, err = r.client.CreateProducer(pulsar.ProducerOptions{
 			Topic: r.topicURL.String(),
+			Name:  strings.Join([]string{r.localClusterName, "remailer-producer"}, "-"),
 		})
 		if err != nil {
 			delay := rand.IntnRange(secondsBetweenConnexionRetryMin, secondsBetweenConnexionRetryMax)

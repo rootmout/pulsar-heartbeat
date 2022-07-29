@@ -93,6 +93,7 @@ func Test_Remail_Success(t *testing.T) {
 
 	producerOptionsRef := pulsar.ProducerOptions{
 		Topic: topicURL.String(),
+		Name:  "pulsar-01-remailer-producer",
 	}
 	pulsarClient.AssertCalled(t, "CreateProducer", producerOptionsRef)
 
@@ -181,6 +182,7 @@ func Test_Remail_SuccessMultipleMessages(t *testing.T) {
 
 	producerOptionsRef := pulsar.ProducerOptions{
 		Topic: topicURL.String(),
+		Name:  "pulsar-01-remailer-producer",
 	}
 	pulsarClient.AssertCalled(t, "CreateProducer", producerOptionsRef)
 	pulsarConsumer.AssertCalled(t, "Receive", context.Background())
@@ -303,6 +305,7 @@ func Test_Remail_SuccessMultipleMessagesWithNoise(t *testing.T) {
 
 	producerOptionsRef := pulsar.ProducerOptions{
 		Topic: topicURL.String(),
+		Name:  "pulsar-01-remailer-producer",
 	}
 	pulsarClient.AssertCalled(t, "CreateProducer", producerOptionsRef)
 	pulsarConsumer.AssertCalled(t, "Receive", context.Background())

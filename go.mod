@@ -90,4 +90,4 @@ replace github.com/miekg/dns => github.com/miekg/dns v1.1.25
 
 replace github.com/aws/aws-sdk-go => github.com/aws/aws-sdk-go v1.34.0
 
-replace github.com/datastax/pulsar-heartbeat v0.0.5 => github.com/rootmout/pulsar-heartbeat/v10 v10.0.4
+replace github.com/datastax/pulsar-heartbeat v0.0.5 => github.com/rootmout/pulsar-heartbeat/v10 v10.0.6
