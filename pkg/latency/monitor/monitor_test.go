@@ -273,3 +273,45 @@ func Test_checukLatency_ErrorWhilePubSub(t *testing.T) {
 
 	session.AssertCalled(t, "ClosePubSubSession")
 }
+
+func Test_FindIndexInSlice_Success(t *testing.T) {
+	timestampedPayloads := []pubsubsession.TimeStampedPayload{
+		{
+			[]byte("StringA"),
+			time.Now(),
+		},
+		{
+			[]byte("StringB"),
+			time.Now(),
+		},
+		{
+			[]byte("StringC"),
+			time.Now(),
+		},
+	}
+
+	monitor := monitor{}
+	require.Equal(t, 2, monitor.findIndexInSlice(&timestampedPayloads, []byte("StringC")))
+	require.Equal(t, 0, monitor.findIndexInSlice(&timestampedPayloads, []byte("StringA")))
+	require.Equal(t, 1, monitor.findIndexInSlice(&timestampedPayloads, []byte("StringB")))
+}
+
+func Test_FindIndexInSlice_NotFound(t *testing.T) {
+	timestampedPayloads := []pubsubsession.TimeStampedPayload{
+		{
+			[]byte("StringA"),
+			time.Now(),
+		},
+		{
+			[]byte("StringB"),
+			time.Now(),
+		},
+		{
+			[]byte("StringC"),
+			time.Now(),
+		},
+	}
+
+	monitor := monitor{}
+	require.Equal(t, -1, monitor.findIndexInSlice(&timestampedPayloads, []byte("StringD")))
+}

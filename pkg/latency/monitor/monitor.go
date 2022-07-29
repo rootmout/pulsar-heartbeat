@@ -6,7 +6,6 @@ import (
 	"github.com/apache/pulsar-client-go/pulsar"
 	pubsubsession "github.com/datastax/pulsar-heartbeat/pkg/latency/pub_sub_session"
 	"github.com/datastax/pulsar-heartbeat/pkg/payload"
-	"golang.org/x/exp/slices"
 	"net/url"
 	"time"
 )
@@ -83,11 +82,7 @@ func (m *monitor) checkLatency(session pubsubsession.PubSubSession, ctx context.
 
 		// Check messages order and integrity.
 		for id, msg := range receivedTimestampedMsgs {
-			index := slices.IndexFunc(
-				sentTimestampedPayloads,
-				func(stampedPayload pubsubsession.TimeStampedPayload) bool {
-					return string(stampedPayload.Payload) == string(msg.Payload)
-				})
+			index := m.findIndexInSlice(&sentTimestampedPayloads, msg.Payload)
 
 			// No message with such payload has been sent: the message is corrupted.
 			if index == -1 {
@@ -113,4 +108,13 @@ func (m *monitor) checkLatency(session pubsubsession.PubSubSession, ctx context.
 
 		return latency, nil
 	}
+}
+
+func (m *monitor) findIndexInSlice(timestampedPayloads *[]pubsubsession.TimeStampedPayload, payload []byte) int {
+	for index, timestampedPayload := range *timestampedPayloads {
+		if string(timestampedPayload.Payload) == string(payload) {
+			return index
+		}
+	}
+	return -1
 }
