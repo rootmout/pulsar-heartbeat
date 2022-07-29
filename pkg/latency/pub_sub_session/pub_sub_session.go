@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"github.com/apache/pulsar-client-go/pulsar"
 	"net/url"
+	"reflect"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -121,7 +123,7 @@ func (p *pubSubSession) StartSending(ctx context.Context, payloads [][]byte) []T
 				"issuer":        p.localClusterName,
 				"remailer":      p.remoteClusterName,
 				"type":          "query",
-				"testStartTime": sentTimestamp.String(),
+				"testTimestamp": strconv.Itoa(int(sentTimestamp.Unix())),
 			},
 		}
 
@@ -137,10 +139,10 @@ func (p *pubSubSession) StartSending(ctx context.Context, payloads [][]byte) []T
 }
 
 func (p *pubSubSession) ClosePubSubSession() {
-	if p.producer != nil {
+	if p.producer != nil && !reflect.ValueOf(p.producer).IsNil() {
 		p.producer.Close()
 	}
-	if p.consumer != nil {
+	if p.consumer != nil && !reflect.ValueOf(p.consumer).IsNil() {
 		p.consumer.Close()
 	}
 }

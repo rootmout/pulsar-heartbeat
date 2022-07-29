@@ -104,12 +104,12 @@ func Test_PubSub_Success(t *testing.T) {
 			getAsyncMsg := call.Arguments.Get(1).(*pulsar.ProducerMessage)
 
 			// It's complicated to test time as it's not a fixed value.
-			// testStartTime is verified separately then removed from properties, this way
+			// testTimestamp is verified separately then removed from properties, this way
 			// the message will match the ref that has no time set.
-			testStartTime, ok := getAsyncMsg.Properties["testStartTime"]
+			testTimestamp, ok := getAsyncMsg.Properties["testTimestamp"]
 			require.True(t, ok)
-			require.NotEqual(t, "", testStartTime)
-			delete(getAsyncMsg.Properties, "testStartTime")
+			require.NotEqual(t, "", testTimestamp)
+			delete(getAsyncMsg.Properties, "testTimestamp")
 
 			// Compare with the ref.
 			require.Equal(t, refAsyncMsg, getAsyncMsg)
@@ -196,7 +196,7 @@ func Test_StartListening_Success(t *testing.T) {
 			"issuer":        "pulsar-01",
 			"remailer":      "pulsar-02",
 			"type":          "reply",
-			"testStartTime": "<date>",
+			"testTimestamp": "<date>",
 		})
 		pulsarMessage.On("Payload").Return([]byte(fmt.Sprintf("payload-%d", i)))
 		pulsarConsumer.On("Receive",
@@ -248,19 +248,19 @@ func Test_StartListening_SuccessWithNoise(t *testing.T) {
 			"issuer":        "pulsar-01",
 			"remailer":      "pulsar-02",
 			"type":          "query",
-			"testStartTime": "<date>",
+			"testTimestamp": "<date>",
 		},
 		{
 			"issuer":        "pulsar-02",
 			"remailer":      "pulsar-01",
 			"type":          "reply",
-			"testStartTime": "<date>",
+			"testTimestamp": "<date>",
 		},
 		{
 			"issuer":        "pulsar-02",
 			"remailer":      "pulsar-01",
 			"type":          "query",
-			"testStartTime": "<date>",
+			"testTimestamp": "<date>",
 		},
 	}
 	for i := 0; i < 3; i++ {
@@ -278,7 +278,7 @@ func Test_StartListening_SuccessWithNoise(t *testing.T) {
 			"issuer":        "pulsar-01",
 			"remailer":      "pulsar-02",
 			"type":          "reply",
-			"testStartTime": "<date>",
+			"testTimestamp": "<date>",
 		})
 		pulsarMessage.On("Payload").Return([]byte(fmt.Sprintf("payload-%d", i)))
 		pulsarConsumer.On("Receive",
