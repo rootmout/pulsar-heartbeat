@@ -1,6 +1,6 @@
 module github.com/datastax/pulsar-heartbeat
 
-go 1.17
+go 1.18
 
 require (
 	github.com/PagerDuty/go-pagerduty v1.3.0
@@ -11,8 +11,11 @@ require (
 	github.com/google/gops v0.3.10
 	github.com/gorilla/websocket v1.4.2
 	github.com/hashicorp/go-retryablehttp v0.6.4
+	github.com/jinzhu/copier v0.3.5
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.11.1
+	github.com/stretchr/testify v1.7.0
+	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
 	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602
 	k8s.io/api v0.18.5
 	k8s.io/apimachinery v0.18.5
@@ -60,7 +63,7 @@ require (
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/stretchr/objx v0.2.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20201208171446-5f87f3452ae9 // indirect
 	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985 // indirect
