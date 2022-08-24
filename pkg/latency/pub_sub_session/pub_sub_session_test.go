@@ -27,9 +27,10 @@ func Test_PubSub_Success(t *testing.T) {
 	for _, payload := range payloadToSend {
 		msg := mocks.Message{}
 		msg.On("Properties").Return(map[string]string{
-			"issuer":   localClusterName,
-			"remailer": remoteClusterName,
-			"type":     "reply",
+			"issuer":        localClusterName,
+			"remailer":      remoteClusterName,
+			"type":          "reply",
+			"testTimestamp": "<timestamp>",
 		})
 		msg.On("Payload").Return(payload)
 		pulsarConsumerMsgQueue = append(pulsarConsumerMsgQueue, &msg)
@@ -60,6 +61,8 @@ func Test_PubSub_Success(t *testing.T) {
 
 	pubSubSession, err := InitPubSubSession(&pulsarClient, topicURL, localClusterName, remoteClusterName)
 	require.NoError(t, err)
+
+	pubSubSession.testTimestampString = "<timestamp>"
 
 	receivedMsgChan, errorChan := pubSubSession.GetChan()
 
@@ -196,7 +199,7 @@ func Test_StartListening_Success(t *testing.T) {
 			"issuer":        "pulsar-01",
 			"remailer":      "pulsar-02",
 			"type":          "reply",
-			"testTimestamp": "<date>",
+			"testTimestamp": "<timestamp>",
 		})
 		pulsarMessage.On("Payload").Return([]byte(fmt.Sprintf("payload-%d", i)))
 		pulsarConsumer.On("Receive",
@@ -212,6 +215,7 @@ func Test_StartListening_Success(t *testing.T) {
 		errorChan:            errorChan,
 		localClusterName:     "pulsar-01",
 		remoteClusterName:    "pulsar-02",
+		testTimestampString:  "<timestamp>",
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(1)*time.Second)
@@ -248,19 +252,19 @@ func Test_StartListening_SuccessWithNoise(t *testing.T) {
 			"issuer":        "pulsar-01",
 			"remailer":      "pulsar-02",
 			"type":          "query",
-			"testTimestamp": "<date>",
+			"testTimestamp": "<timestamp>",
 		},
 		{
 			"issuer":        "pulsar-02",
 			"remailer":      "pulsar-01",
 			"type":          "reply",
-			"testTimestamp": "<date>",
+			"testTimestamp": "<timestamp>",
 		},
 		{
 			"issuer":        "pulsar-02",
 			"remailer":      "pulsar-01",
 			"type":          "query",
-			"testTimestamp": "<date>",
+			"testTimestamp": "<timestamp>",
 		},
 	}
 	for i := 0; i < 3; i++ {
@@ -278,7 +282,7 @@ func Test_StartListening_SuccessWithNoise(t *testing.T) {
 			"issuer":        "pulsar-01",
 			"remailer":      "pulsar-02",
 			"type":          "reply",
-			"testTimestamp": "<date>",
+			"testTimestamp": "<timestamp>",
 		})
 		pulsarMessage.On("Payload").Return([]byte(fmt.Sprintf("payload-%d", i)))
 		pulsarConsumer.On("Receive",
@@ -294,6 +298,7 @@ func Test_StartListening_SuccessWithNoise(t *testing.T) {
 		errorChan:            errorChan,
 		localClusterName:     "pulsar-01",
 		remoteClusterName:    "pulsar-02",
+		testTimestampString:  "<timestamp>",
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(1)*time.Second)

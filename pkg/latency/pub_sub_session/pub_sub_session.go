@@ -22,10 +22,11 @@ type PubSubSession interface {
 }
 
 type pubSubSession struct {
-	producer          pulsar.Producer
-	consumer          pulsar.Consumer
-	localClusterName  string
-	remoteClusterName string
+	producer            pulsar.Producer
+	consumer            pulsar.Consumer
+	localClusterName    string
+	remoteClusterName   string
+	testTimestampString string
 
 	consumedMessagesChan chan []TimeStampedPayload
 	errorChan            chan error
@@ -42,6 +43,7 @@ func InitPubSubSession(client pulsar.Client, topicURL *url.URL, localClusterName
 		remoteClusterName:    remoteClusterName,
 		consumedMessagesChan: make(chan []TimeStampedPayload),
 		errorChan:            make(chan error),
+		testTimestampString:  strconv.Itoa(int(time.Now().Unix())),
 	}
 
 	var err error
@@ -94,8 +96,8 @@ func (p *pubSubSession) StartListening(ctx context.Context, expectedMsgCount int
 			// Discard messages if it's not a reply or if he comes from another remailer.
 			if msg.Properties()["issuer"] != p.localClusterName ||
 				msg.Properties()["remailer"] != p.remoteClusterName ||
-				msg.Properties()["type"] != "reply" {
-
+				msg.Properties()["type"] != "reply" ||
+				msg.Properties()["testTimestamp"] != p.testTimestampString {
 				continue
 			}
 
@@ -116,17 +118,17 @@ func (p *pubSubSession) StartSending(ctx context.Context, payloads [][]byte) []T
 
 	for _, payload := range payloads {
 
-		sentTimestamp := time.Now()
 		asyncMsg := pulsar.ProducerMessage{
 			Payload: payload,
 			Properties: map[string]string{
 				"issuer":        p.localClusterName,
 				"remailer":      p.remoteClusterName,
 				"type":          "query",
-				"testTimestamp": strconv.Itoa(int(sentTimestamp.Unix())),
+				"testTimestamp": p.testTimestampString,
 			},
 		}
 
+		sentTimestamp := time.Now()
 		p.producer.SendAsync(ctx, &asyncMsg, p.sendMessageCallbackFunc)
 
 		sentMessages = append(sentMessages, TimeStampedPayload{
