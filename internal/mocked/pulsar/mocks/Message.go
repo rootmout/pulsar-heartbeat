@@ -14,6 +14,22 @@ type Message struct {
 	mock.Mock
 }
 
+// BrokerPublishTime provides a mock function with given fields:
+func (_m *Message) BrokerPublishTime() *time.Time {
+	ret := _m.Called()
+
+	var r0 *time.Time
+	if rf, ok := ret.Get(0).(func() *time.Time); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*time.Time)
+		}
+	}
+
+	return r0
+}
+
 // EventTime provides a mock function with given fields:
 func (_m *Message) EventTime() time.Time {
 	ret := _m.Called()
@@ -82,6 +98,22 @@ func (_m *Message) ID() pulsar.MessageID {
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(pulsar.MessageID)
+		}
+	}
+
+	return r0
+}
+
+// Index provides a mock function with given fields:
+func (_m *Message) Index() *uint64 {
+	ret := _m.Called()
+
+	var r0 *uint64
+	if rf, ok := ret.Get(0).(func() *uint64); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*uint64)
 		}
 	}
 
@@ -199,6 +231,22 @@ func (_m *Message) RedeliveryCount() uint32 {
 		r0 = rf()
 	} else {
 		r0 = ret.Get(0).(uint32)
+	}
+
+	return r0
+}
+
+// SchemaVersion provides a mock function with given fields:
+func (_m *Message) SchemaVersion() []byte {
+	ret := _m.Called()
+
+	var r0 []byte
+	if rf, ok := ret.Get(0).(func() []byte); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]byte)
+		}
 	}
 
 	return r0
