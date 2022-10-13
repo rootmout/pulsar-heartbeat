@@ -63,6 +63,29 @@ func (_m *Client) CreateReader(_a0 pulsar.ReaderOptions) (pulsar.Reader, error) 
 	return r0, r1
 }
 
+// CreateTableView provides a mock function with given fields: _a0
+func (_m *Client) CreateTableView(_a0 pulsar.TableViewOptions) (pulsar.TableView, error) {
+	ret := _m.Called(_a0)
+
+	var r0 pulsar.TableView
+	if rf, ok := ret.Get(0).(func(pulsar.TableViewOptions) pulsar.TableView); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(pulsar.TableView)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(pulsar.TableViewOptions) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Subscribe provides a mock function with given fields: _a0
 func (_m *Client) Subscribe(_a0 pulsar.ConsumerOptions) (pulsar.Consumer, error) {
 	ret := _m.Called(_a0)

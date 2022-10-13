@@ -17,13 +17,31 @@ type Consumer struct {
 }
 
 // Ack provides a mock function with given fields: _a0
-func (_m *Consumer) Ack(_a0 pulsar.Message) {
-	_m.Called(_a0)
+func (_m *Consumer) Ack(_a0 pulsar.Message) error {
+	ret := _m.Called(_a0)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(pulsar.Message) error); ok {
+		r0 = rf(_a0)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }
 
 // AckID provides a mock function with given fields: _a0
-func (_m *Consumer) AckID(_a0 pulsar.MessageID) {
-	_m.Called(_a0)
+func (_m *Consumer) AckID(_a0 pulsar.MessageID) error {
+	ret := _m.Called(_a0)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(pulsar.MessageID) error); ok {
+		r0 = rf(_a0)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }
 
 // Chan provides a mock function with given fields:
